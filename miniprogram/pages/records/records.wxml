@@ -1,0 +1,58 @@
+<view class="records-page">
+  <view class="filter-bar">
+    <button
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="filter-button {{activeFilter === item.key ? 'active' : ''}}"
+      data-filter="{{item.key}}"
+      bindtap="changeFilter"
+    >
+      <text>{{item.label}}</text>
+      <text class="filter-count">{{item.count}}</text>
+    </button>
+  </view>
+
+  <view wx:if="{{items.length}}" class="record-list">
+    <view
+      wx:for="{{items}}"
+      wx:key="itemKey"
+      class="record-row"
+      hover-class="record-row-hover"
+      data-type="{{item.itemType}}"
+      data-id="{{item.id}}"
+      data-claimable="{{item.canClaim}}"
+      bindtap="openItem"
+    >
+      <view class="record-symbol tone-{{item.prizeTone || item.coverTone || 'red'}}">{{item.symbol}}</view>
+      <view class="record-main">
+        <view class="record-heading">
+          <text class="record-title">{{item.itemType === 'activity' ? item.title : item.activityTitle}}</text>
+          <text class="status-pill {{item.statusTone === 'muted' ? 'muted' : item.statusTone === 'warn' ? 'warn' : ''}}">{{item.statusLabel}}</text>
+        </view>
+
+        <block wx:if="{{item.itemType === 'record'}}">
+          <text class="record-prize {{item.isWin ? 'won' : ''}}">{{item.prizeText}}</text>
+          <view class="record-meta">
+            <text>{{item.timeText}}</text>
+            <text class="row-action">{{item.actionText}} ></text>
+          </view>
+        </block>
+
+        <block wx:else>
+          <text class="record-prize">{{item.subtitle || '我发起的抽奖活动'}}</text>
+          <view class="record-meta">
+            <text>{{item.participantText}} · {{item.timeText}}</text>
+            <text class="row-action">详情 ></text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view wx:else class="empty-state records-empty">
+    <view class="empty-symbol">{{emptySymbol}}</view>
+    <text class="empty-title">{{emptyTitle}}</text>
+    <text class="empty-copy">{{emptyCopy}}</text>
+    <button class="secondary-button empty-button" bindtap="goDiscover">去发现</button>
+  </view>
+</view>

@@ -1,0 +1,96 @@
+<view class="claim-page">
+  <view wx:if="{{loading}}" class="empty-state">
+    <text class="empty-copy">正在读取领奖信息...</text>
+  </view>
+
+  <view wx:elif="{{invalid}}" class="empty-state">
+    <view class="empty-symbol">!</view>
+    <text class="empty-title">找不到这条中奖记录</text>
+    <text class="empty-copy">领奖入口仅对有效的中奖记录开放。</text>
+    <button class="secondary-button state-button" bindtap="goBack">返回记录</button>
+  </view>
+
+  <block wx:else>
+    <view class="prize-summary">
+      <view class="prize-symbol tone-{{record.prizeTone || 'red'}}">{{record.prizeSymbol || '奖'}}</view>
+      <view class="prize-copy">
+        <text class="eyebrow">中奖奖品</text>
+        <text class="prize-name">{{record.prizeName}}</text>
+        <text class="activity-name">{{record.activityTitle}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{expired}}" class="expired-content">
+      <view class="empty-symbol">期</view>
+      <text class="empty-title">使用期限已截止</text>
+      <text class="empty-copy">截止时间为 {{deadlineText}}，如有疑问请联系活动主办方。</text>
+      <button class="secondary-button state-button" bindtap="goBack">返回记录</button>
+    </view>
+
+    <view wx:elif="{{isCoupon}}" class="coupon-content">
+      <view class="coupon-ticket">
+        <text class="coupon-label">演示兑换券码</text>
+        <text class="coupon-code">{{couponCode}}</text>
+        <button class="copy-button" bindtap="copyCoupon">复制券码</button>
+      </view>
+
+      <view class="instruction-section">
+        <text class="instruction-title">核销说明</text>
+        <view class="instruction-row">
+          <text class="instruction-index">1</text>
+          <text>到店或联系活动主办方时出示本页券码。</text>
+        </view>
+        <view class="instruction-row">
+          <text class="instruction-index">2</text>
+          <text>当前为本地流程演示，正式核销需接入服务端一次性券码。</text>
+        </view>
+        <view class="instruction-row">
+          <text class="instruction-index">3</text>
+          <text>{{couponDeadlineCopy}}</text>
+        </view>
+      </view>
+
+      <view class="privacy-note">优惠券无需填写收件信息，核销时由主办方确认券码。</view>
+    </view>
+
+    <view wx:else class="form-content">
+      <view class="form-heading">
+        <text class="section-title">{{isSubmitted ? '收件信息' : '填写收件信息'}}</text>
+        <text class="section-note">{{isSubmitted ? '信息已提交，主办方将按此地址寄出奖品。' : '仅用于本次实体奖品寄送，请确认信息准确。'}}</text>
+      </view>
+
+      <view class="form-fields">
+        <view class="field-row">
+          <text class="field-label">收件人</text>
+          <input class="field-input" value="{{form.recipient}}" placeholder="请输入真实姓名" placeholder-class="placeholder" maxlength="20" disabled="{{isSubmitted}}" data-field="recipient" bindinput="updateField" />
+        </view>
+        <view class="field-row">
+          <text class="field-label">手机号</text>
+          <input class="field-input" value="{{form.mobile}}" placeholder="用于配送联系" placeholder-class="placeholder" type="number" maxlength="11" disabled="{{isSubmitted}}" data-field="mobile" bindinput="updateField" />
+        </view>
+        <picker mode="region" value="{{form.region}}" disabled="{{isSubmitted}}" bindchange="chooseRegion">
+          <view class="field-row">
+            <text class="field-label">所在地区</text>
+            <text class="picker-value {{form.region.length ? '' : 'placeholder'}}">{{form.region.length ? regionText : '请选择省 / 市 / 区'}}</text>
+            <text class="field-arrow">></text>
+          </view>
+        </picker>
+        <view class="field-row address-row">
+          <text class="field-label">详细地址</text>
+          <textarea class="address-input" value="{{form.address}}" placeholder="街道、楼栋、门牌号" placeholder-class="placeholder" maxlength="120" auto-height disabled="{{isSubmitted}}" data-field="address" bindinput="updateField"></textarea>
+        </view>
+      </view>
+
+      <view wx:if="{{!isSubmitted}}" class="agreement" bindtap="toggleAgreement">
+        <view class="checkbox {{agreed ? 'checked' : ''}}">{{agreed ? '✓' : ''}}</view>
+        <text>同意将以上信息仅用于本次奖品寄送</text>
+      </view>
+
+      <view wx:if="{{deadlineText && !isSubmitted}}" class="deadline-note">请在 {{deadlineText}} 前提交，逾期视为放弃领奖。</view>
+      <view wx:if="{{isSubmitted}}" class="submitted-note">已于 {{submittedText || '此前'}} 提交。如需修改，请联系活动主办方。</view>
+
+      <button wx:if="{{!isSubmitted}}" class="primary-button submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submitClaim">确认提交</button>
+      <button wx:else class="secondary-button submit-button" bindtap="goBack">返回记录</button>
+    </view>
+  </block>
+</view>

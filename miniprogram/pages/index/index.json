@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "好运抽奖",
+  "navigationBarBackgroundColor": "#F43F50",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F4F4F3",
+  "backgroundTextStyle": "dark"
+}

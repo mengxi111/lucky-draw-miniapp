@@ -1,0 +1,299 @@
+.claim-page {
+  min-height: 100vh;
+  padding: 30rpx 28rpx calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.prize-summary {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0 34rpx;
+  border-bottom: 2rpx solid #e4e4df;
+}
+
+.prize-symbol {
+  display: flex;
+  width: 116rpx;
+  height: 116rpx;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  background: #f8e1dc;
+  color: #b43e31;
+  font-size: 44rpx;
+  font-weight: 800;
+}
+
+.prize-symbol.tone-gold,
+.prize-symbol.tone-yellow,
+.prize-symbol.tone-amber,
+.prize-symbol.tone-coffee {
+  background: #f8ebcd;
+  color: #97631c;
+}
+
+.prize-symbol.tone-green,
+.prize-symbol.tone-mint,
+.prize-symbol.tone-forest {
+  background: #dfede1;
+  color: #347241;
+}
+
+.prize-symbol.tone-blue {
+  background: #dfeaf0;
+  color: #37697d;
+}
+
+.prize-symbol.tone-pink,
+.prize-symbol.tone-purple {
+  background: #efe2ec;
+  color: #7e4d73;
+}
+
+.prize-symbol.tone-gray {
+  background: #e9e9e5;
+  color: #777873;
+}
+
+.prize-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  margin-left: 24rpx;
+}
+
+.eyebrow {
+  color: #d94a3a;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.prize-name {
+  overflow: hidden;
+  margin-top: 8rpx;
+  font-size: 36rpx;
+  font-weight: 800;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-name {
+  overflow: hidden;
+  margin-top: 8rpx;
+  color: #858681;
+  font-size: 23rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coupon-content,
+.form-content {
+  padding-top: 38rpx;
+}
+
+.coupon-ticket {
+  position: relative;
+  display: flex;
+  min-height: 260rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #e6c5bf;
+  border-left: 8rpx solid #d94a3a;
+  border-radius: 8rpx;
+  background: #fff;
+}
+
+.coupon-label {
+  color: #81827d;
+  font-size: 22rpx;
+}
+
+.coupon-code {
+  margin-top: 16rpx;
+  color: #272825;
+  font-family: monospace;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.copy-button {
+  height: 62rpx;
+  margin-top: 24rpx;
+  padding: 0 24rpx;
+  border: 2rpx solid #d94a3a;
+  background: transparent;
+  color: #d94a3a;
+  font-size: 23rpx;
+  font-weight: 700;
+  line-height: 58rpx;
+}
+
+.instruction-section {
+  margin-top: 46rpx;
+  padding-top: 30rpx;
+  border-top: 2rpx solid #e4e4df;
+}
+
+.instruction-title {
+  display: block;
+  margin-bottom: 24rpx;
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.instruction-row {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 18rpx;
+  color: #5f605c;
+  font-size: 25rpx;
+  line-height: 1.6;
+}
+
+.instruction-index {
+  display: flex;
+  width: 38rpx;
+  height: 38rpx;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 2rpx 16rpx 0 0;
+  border-radius: 50%;
+  background: #ecece7;
+  color: #686964;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.privacy-note,
+.deadline-note,
+.submitted-note {
+  margin-top: 34rpx;
+  padding: 22rpx 24rpx;
+  border-left: 6rpx solid #c9cac5;
+  background: #ebebe6;
+  color: #666762;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+.expired-content {
+  display: flex;
+  min-height: 520rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.form-heading {
+  padding-bottom: 24rpx;
+}
+
+.form-fields {
+  border-top: 2rpx solid #deded9;
+}
+
+.field-row {
+  display: flex;
+  min-height: 104rpx;
+  align-items: center;
+  border-bottom: 2rpx solid #deded9;
+}
+
+.field-label {
+  width: 150rpx;
+  flex: 0 0 auto;
+  color: #333431;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.field-input,
+.picker-value,
+.address-input {
+  min-width: 0;
+  flex: 1;
+  color: #333431;
+  font-size: 26rpx;
+}
+
+.picker-value {
+  overflow: hidden;
+  line-height: 104rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.field-arrow {
+  margin-left: 12rpx;
+  color: #adaea9;
+  font-size: 25rpx;
+}
+
+.placeholder {
+  color: #a7a8a3;
+}
+
+.address-row {
+  align-items: flex-start;
+  min-height: 152rpx;
+  padding: 34rpx 0;
+}
+
+.address-input {
+  min-height: 80rpx;
+  line-height: 1.5;
+}
+
+.agreement {
+  display: flex;
+  align-items: center;
+  margin-top: 26rpx;
+  color: #62635f;
+  font-size: 23rpx;
+}
+
+.checkbox {
+  display: flex;
+  width: 34rpx;
+  height: 34rpx;
+  align-items: center;
+  justify-content: center;
+  margin-right: 14rpx;
+  border: 2rpx solid #bfc0bb;
+  border-radius: 4rpx;
+  background: #fff;
+  color: #fff;
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.checkbox.checked {
+  border-color: #d94a3a;
+  background: #d94a3a;
+}
+
+.deadline-note {
+  border-left-color: #d59a3e;
+  background: #fff0d7;
+  color: #81591d;
+}
+
+.submitted-note {
+  border-left-color: #4d9660;
+  background: #e9f5eb;
+  color: #347242;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 34rpx;
+}
+
+.state-button {
+  min-width: 248rpx;
+  margin-top: 32rpx;
+}

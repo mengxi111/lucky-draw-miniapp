@@ -1,0 +1,82 @@
+<view class="profile-page">
+  <view class="profile-header">
+    <view class="avatar">{{avatarText}}</view>
+    <view class="profile-copy">
+      <text class="profile-name">{{nickname}}</text>
+      <text class="profile-note">数据仅保存在当前设备</text>
+    </view>
+  </view>
+
+  <view class="stats-band">
+    <view wx:for="{{stats}}" wx:key="key" class="stat-item">
+      <text class="stat-value">{{item.value}}</text>
+      <text class="stat-label">{{item.label}}</text>
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <view class="menu-row" hover-class="menu-row-hover" bindtap="goRecords">
+      <view class="menu-icon">签</view>
+      <view class="menu-copy">
+        <text class="menu-title">抽奖记录</text>
+        <text class="menu-note">{{recordCount}} 条参与记录</text>
+      </view>
+      <view wx:if="{{pendingClaimCount}}" class="menu-badge">{{pendingClaimCount}}</view>
+      <text class="chevron">></text>
+    </view>
+  </view>
+
+  <view class="profile-section">
+    <view class="section-heading">
+      <view>
+        <text class="section-title">我发起的活动</text>
+        <text class="section-note">管理活动并查看参与进度</text>
+      </view>
+      <button class="section-action" bindtap="goCreate">发起新的</button>
+    </view>
+
+    <view wx:if="{{createdActivities.length}}" class="activity-list">
+      <view
+        wx:for="{{createdActivities}}"
+        wx:key="id"
+        class="activity-row"
+        hover-class="activity-row-hover"
+        data-id="{{item.id}}"
+        bindtap="openActivity"
+      >
+        <view class="activity-symbol tone-{{item.coverTone || 'red'}}">{{item.symbol}}</view>
+        <view class="activity-main">
+          <view class="activity-topline">
+            <text class="activity-title">{{item.title}}</text>
+            <text class="status-pill {{item.statusTone === 'muted' ? 'muted' : item.statusTone === 'warn' ? 'warn' : ''}}">{{item.statusLabel}}</text>
+          </view>
+          <text class="activity-meta">{{item.participantCount || 0}} 人参与 · {{item.endText}}</text>
+        </view>
+        <button
+          wx:if="{{item.actionText}}"
+          class="activity-action {{item.statusKey === 'paused' ? 'resume' : ''}}"
+          data-id="{{item.id}}"
+          data-action="{{item.statusKey === 'paused' ? 'resume' : 'pause'}}"
+          catchtap="toggleActivity"
+        >{{item.actionText}}</button>
+        <text class="chevron">></text>
+      </view>
+    </view>
+
+    <view wx:else class="inline-empty">
+      <text class="inline-empty-title">还没有发起活动</text>
+      <text class="inline-empty-copy">创建一个活动后，会在这里看到参与进度。</text>
+      <button class="secondary-button inline-empty-button" bindtap="goCreate">去发起</button>
+    </view>
+  </view>
+
+  <view class="data-section">
+    <view>
+      <text class="data-title">本地演示数据</text>
+      <text class="data-note">恢复预置活动，同时清除你的参与和领奖信息</text>
+    </view>
+    <button class="danger-button" bindtap="confirmReset">清空</button>
+  </view>
+
+  <text class="version-note">好运抽奖 · 本地体验版</text>
+</view>

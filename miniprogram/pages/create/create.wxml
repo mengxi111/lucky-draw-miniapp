@@ -1,0 +1,326 @@
+<view class="create-page">
+  <view class="create-summary">
+    <view class="summary-heading">
+      <view>
+        <view class="summary-title">核心信息 {{formProgress.completed}} / {{formProgress.total}}</view>
+        <view class="summary-copy">{{formProgress.copy}}</view>
+        <view wx:if="{{hasDraft}}" class="draft-note">{{draftSavedText}}</view>
+      </view>
+      <view class="summary-actions">
+        <button wx:if="{{hasDraft}}" class="draft-clear" catchtap="discardDraft">清除保存</button>
+        <view class="summary-status {{formProgress.ready ? 'is-ready' : ''}}">{{formProgress.ready ? '可发布' : '编辑中'}}</view>
+      </view>
+    </view>
+    <view class="progress-track"><view class="progress-value" style="width: {{formProgress.percent}}%;"></view></view>
+  </view>
+
+  <view class="section-kicker scene-kicker">
+    <text>选择活动场景</text>
+    <text class="muted-note">自动带入封面和推荐说明</text>
+  </view>
+
+  <scroll-view class="template-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="template-list">
+      <view
+        wx:for="{{templates}}"
+        wx:key="key"
+        class="template-card {{activeTemplate === item.key ? 'is-active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="selectTemplate"
+      >
+        <view class="template-mark">{{item.mark}}</view>
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="section-kicker">
+    <text>奖品设置</text>
+    <text class="muted-note">当前支持实体奖品与优惠券</text>
+  </view>
+
+  <view class="form-card prize-card">
+    <view class="gift-visual tone-{{coverTone}}">
+      <image class="gift-cover-image" src="{{coverImage}}" mode="aspectFill"></image>
+      <view class="gift-cover-shade"></view>
+      <button class="change-cover" bindtap="changeCover">切换封面</button>
+      <view wx:if="{{!coverImage}}" class="gift-scene">
+        <view class="gift-box gift-main">
+          <view class="gift-lid"></view>
+          <view class="gift-ribbon-v"></view>
+          <view class="gift-ribbon-h"></view>
+          <view class="gift-bow">∞</view>
+        </view>
+        <view class="gift-box gift-small">
+          <view class="gift-lid"></view>
+          <view class="open-seal">开</view>
+        </view>
+      </view>
+      <view wx:if="{{!coverImage}}" class="gift-floor"></view>
+    </view>
+
+    <scroll-view class="prize-type-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="prize-type-list">
+        <view
+          wx:for="{{prizeTypes}}"
+          wx:key="key"
+          class="prize-type {{prizeType === item.key ? 'is-active' : ''}} {{!item.available ? 'is-disabled' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="selectPrizeType"
+        >
+          <text>{{item.label}}</text>
+          <text wx:if="{{!item.available}}" class="prize-type-note">待接入</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="cloud-prize-note">云端版可扩展：{{cloudPrizeTypes}}</view>
+    <view wx:if="{{errors.prizeType}}" class="field-error">{{errors.prizeType}}</view>
+
+    <view class="line-field {{errors.prizeName ? 'has-error' : ''}}">
+      <text class="line-label">奖品名称</text>
+      <input
+        class="line-input"
+        value="{{prizeName}}"
+        maxlength="24"
+        placeholder="输入奖品名称，最多 24 个字"
+        placeholder-class="input-placeholder"
+        bindinput="onPrizeNameInput"
+      />
+    </view>
+    <view wx:if="{{errors.prizeName}}" class="field-error">{{errors.prizeName}}</view>
+
+    <view class="line-field {{errors.prizeCount ? 'has-error' : ''}}">
+      <text class="line-label">奖品份数</text>
+      <input
+        class="line-input"
+        value="{{prizeCount}}"
+        type="number"
+        maxlength="5"
+        placeholder="输入份数"
+        placeholder-class="input-placeholder"
+        bindinput="onPrizeCountInput"
+      />
+    </view>
+    <view wx:if="{{errors.prizeCount}}" class="field-error">{{errors.prizeCount}}</view>
+  </view>
+
+  <view class="section-kicker">
+    <text>开奖设置</text>
+    <text class="muted-note">结果立即写入抽奖记录</text>
+  </view>
+
+  <view class="form-card setting-card">
+    <view class="draw-mode-summary">
+      <view class="instant-mark">抽</view>
+      <view class="draw-mode-copy">
+        <view class="instant-title">即抽即中</view>
+        <view class="instant-copy">参与后立即揭晓，适合门店与现场福利</view>
+      </view>
+      <view class="mode-ready">已启用</view>
+    </view>
+
+    <view class="schedule-row">
+      <text class="line-label">活动截止</text>
+      <view class="schedule-pickers">
+        <picker mode="date" value="{{endDate}}" start="{{minDate}}" end="{{maxDate}}" bindchange="onDateChange">
+          <view class="picker-value">{{endDate}}</view>
+        </picker>
+        <picker mode="time" value="{{endTime}}" bindchange="onTimeChange">
+          <view class="picker-value">{{endTime}} ›</view>
+        </picker>
+      </view>
+    </view>
+    <view wx:if="{{errors.schedule}}" class="field-error schedule-error">{{errors.schedule}}</view>
+
+    <view class="limit-row">
+      <text>每人每日抽奖次数</text>
+      <view class="limit-control">
+        <view
+          wx:for="{{limitOptions}}"
+          wx:key="*this"
+          class="limit-option {{dailyLimit === item ? 'is-active' : ''}}"
+          data-value="{{item}}"
+          bindtap="onLimitTap"
+        >{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section-kicker">
+    <text>活动信息</text>
+    <text class="muted-note">联系方式与说明可选填</text>
+  </view>
+
+  <view class="form-card intro-card">
+    <view class="organizer-row">
+      <text class="line-label">抽奖发起人</text>
+      <view class="contact-entry" bindtap="openContactSheet">
+        <text>{{contactLabel}}</text><text class="chevron">›</text>
+      </view>
+    </view>
+    <view class="profile-strip {{errors.organizer ? 'has-error' : ''}}">
+      <view class="avatar">运</view>
+      <input
+        class="organizer-input"
+        value="{{organizer}}"
+        maxlength="30"
+        placeholder="填写发起人名称"
+        placeholder-class="input-placeholder"
+        bindinput="onOrganizerInput"
+      />
+    </view>
+    <view wx:if="{{errors.organizer}}" class="field-error">{{errors.organizer}}</view>
+
+    <view class="description-label">抽奖说明 <text class="muted-note">（选填）</text></view>
+    <textarea
+      class="description-area"
+      value="{{description}}"
+      maxlength="500"
+      placeholder="请输入抽奖说明"
+      placeholder-class="input-placeholder"
+      bindinput="onDescriptionInput"
+    ></textarea>
+  </view>
+
+  <view class="form-card intro-block-card">
+    <view wx:for="{{introBlocks}}" class="intro-block">
+      <view class="intro-block-heading">
+        <text>补充说明 {{index + 1}}</text>
+        <text class="remove-link" data-index="{{index}}" bindtap="removeIntroBlock">删除</text>
+      </view>
+      <textarea
+        class="intro-block-input"
+        value="{{item}}"
+        maxlength="300"
+        data-index="{{index}}"
+        placeholder="填写领奖流程、使用说明或活动详情"
+        placeholder-class="input-placeholder"
+        bindinput="onIntroInput"
+      ></textarea>
+    </view>
+    <button class="add-intro" bindtap="addIntroBlock">＋ 添加一段补充说明</button>
+  </view>
+
+  <view class="form-card more-trigger" bindtap="toggleMore">
+    <text>{{moreExpanded ? '⌃' : '⌄'}}</text>
+    <text>{{moreExpanded ? '收起参与页设置' : '展开参与页设置'}}</text>
+  </view>
+
+  <block wx:if="{{moreExpanded}}">
+    <view wx:for="{{featureSections}}" wx:key="key" class="feature-section">
+      <view wx:if="{{item.title}}" class="feature-heading">{{item.title}}</view>
+      <view class="feature-list">
+        <view wx:for="{{item.items}}" wx:for-item="feature" wx:for-index="featureIndex" wx:key="key" class="feature-row {{feature.advanced ? 'advanced-row' : ''}}">
+          <view wx:if="{{feature.advanced}}" class="advanced-badge">◆</view>
+          <view class="feature-copy">
+            <view class="feature-title-line">
+              <text>{{feature.title}}</text>
+              <text wx:if="{{feature.link}}" class="feature-link">{{feature.link}}</text>
+            </view>
+            <view wx:if="{{feature.subtitle}}" class="feature-subtitle">{{feature.subtitle}}</view>
+          </view>
+          <switch
+            checked="{{feature.enabled}}"
+            color="#08bf72"
+            disabled="{{!feature.available}}"
+            data-section="{{index}}"
+            data-index="{{featureIndex}}"
+            bindchange="onFeatureChange"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="cloud-capability-panel">
+      <view class="cloud-capability-title">云端版扩展能力</view>
+      <view class="cloud-capability-copy">以下能力需要云函数、用户身份与服务端事务，当前演示不会生成虚假入口。</view>
+      <view class="cloud-capability-list">
+        <text wx:for="{{cloudCapabilities}}" wx:key="*this" class="cloud-capability-item">{{item}}</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="policy-note">创建即表示同意活动规范，奖品与活动信息应真实有效。</view>
+
+  <view class="bottom-actions">
+    <button class="test-button" disabled="{{submitting}}" bindtap="onTest">预览配置</button>
+    <button class="submit-button" loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">
+      {{submitting ? '正在发起' : '发起抽奖'}}
+    </button>
+  </view>
+
+  <view wx:if="{{previewVisible}}" class="preview-mask" bindtap="closePreview">
+    <view class="preview-sheet" catchtap="preventClose">
+      <view class="sheet-handle"></view>
+      <view class="preview-heading">
+        <view>
+          <view class="preview-kicker">参与页预览</view>
+          <view class="preview-title">发布前确认</view>
+        </view>
+        <button class="preview-close" aria-label="关闭预览" bindtap="closePreview">×</button>
+      </view>
+      <view class="preview-cover tone-{{previewActivity.coverTone}}">
+        <image class="preview-cover-image" src="{{previewActivity.coverImage}}" mode="aspectFill"></image>
+        <view class="preview-cover-shade"></view>
+        <view class="preview-category">{{previewActivity.category}}</view>
+        <view class="preview-cover-copy">
+          <view class="preview-activity-title">{{previewActivity.title}}</view>
+          <view class="preview-activity-copy">{{previewActivity.subtitle}}</view>
+        </view>
+      </view>
+      <view class="preview-details">
+        <view class="preview-row"><text>奖品</text><text>{{previewPrizeText}}</text></view>
+        <view class="preview-row"><text>截止</text><text>{{previewEndText}}</text></view>
+        <view class="preview-row"><text>发起人</text><text>{{previewActivity.organizer}}</text></view>
+        <view class="preview-row"><text>每日次数</text><text>{{previewActivity.dailyLimit}} 次</text></view>
+      </view>
+      <view class="preview-note">预览不会创建活动或扣减奖品。</view>
+      <view class="preview-actions">
+        <button class="preview-edit" bindtap="closePreview">继续编辑</button>
+        <button class="preview-publish" loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">确认发布</button>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{contactSheetVisible}}" class="sheet-mask" bindtap="closeContactSheet">
+    <view class="contact-sheet" catchtap="preventClose">
+      <view class="sheet-handle"></view>
+      <view class="sheet-title">联系方式</view>
+      <view class="sheet-copy">选择至少一种你的联系方式</view>
+
+      <view class="contact-option-list">
+        <view
+          wx:for="{{contactOptions}}"
+          wx:key="key"
+          class="contact-option {{!item.available ? 'is-disabled' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="selectContactType"
+        >
+          <view class="radio {{draftContactType === item.key ? 'is-active' : ''}}"></view>
+          <view class="contact-option-copy">
+            <view class="contact-title">
+              <text>{{item.title}}</text>
+              <text wx:if="{{!item.available}}" class="contact-unavailable">暂未开放</text>
+            </view>
+            <view class="contact-subtitle">{{item.subtitle}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="sheet-note-label">联系内容 <text>（会在活动详情中展示）</text></view>
+      <input
+        class="contact-input"
+        value="{{draftContactText}}"
+        maxlength="80"
+        disabled="{{draftContactType === 'none' || draftContactType === 'qrcode'}}"
+        placeholder="{{draftContactType === 'phone' ? '输入 11 位手机号' : draftContactType === 'address' ? '输入完整店铺地址' : '请先选择可用的联系方式'}}"
+        placeholder-class="input-placeholder"
+        bindinput="onContactTextInput"
+      />
+      <view wx:if="{{contactError}}" class="field-error contact-error">{{contactError}}</view>
+      <view class="sheet-buttons">
+        <button class="sheet-clear" bindtap="clearContact">清除</button>
+        <button class="sheet-confirm" bindtap="confirmContact">完成</button>
+      </view>
+    </view>
+  </view>
+</view>

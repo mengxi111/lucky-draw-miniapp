@@ -1,0 +1,141 @@
+<view class="index-page">
+  <view class="hero-band">
+    <view class="hero-actions">
+      <button class="capsule-button" bindtap="signIn">
+        <text class="capsule-icon">{{signedIn ? '✓' : '♡'}}</text>
+        <text>{{signedIn ? '已签到' : '签到'}}</text>
+      </button>
+      <button class="capsule-button" bindtap="showCommand">
+        <text class="key-icon">⌕</text>
+        <text>口令</text>
+      </button>
+    </view>
+
+    <view class="hero-title">官方大奖</view>
+    <view wx:if="{{officialActivity}}" class="official-card">
+      <view class="official-media tone-{{officialActivity.coverTone}}">
+        <image wx:if="{{officialActivity.coverImage}}" class="official-image" src="{{officialActivity.coverImage}}" mode="aspectFill"></image>
+        <view wx:else class="official-placeholder">
+          <text class="official-symbol">{{officialActivity.coverSymbol}}</text>
+          <text class="official-category">{{officialActivity.category}}</text>
+        </view>
+        <view class="official-chip">{{officialActivity.statusLabel}}</view>
+      </view>
+      <view class="official-content">
+        <view class="official-name">{{officialActivity.title}}</view>
+        <view class="official-prizes">{{officialActivity.prizeNames}}</view>
+        <button class="official-join" bindtap="openOfficial">参与抽奖</button>
+      </view>
+    </view>
+    <view wx:else class="official-card official-empty">
+      <view class="official-symbol">奖</view>
+      <view class="official-name">暂无官方活动</view>
+    </view>
+    <view class="floor-grid"></view>
+  </view>
+
+  <view class="content-area">
+    <view class="section-heading reward-heading">
+      <view>
+        <view class="section-title">天天送 666 好运金</view>
+        <view class="section-note">每日活动预告 · 体验券演示</view>
+      </view>
+      <button class="share-button" open-type="share">分享</button>
+    </view>
+
+    <scroll-view class="reward-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="reward-row">
+        <button
+          wx:for="{{rewardDays}}"
+          wx:key="key"
+          class="reward-card {{item.current ? 'current' : ''}} {{item.reminded ? 'reminded' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="remindReward"
+        >
+          <view wx:if="{{item.current}}" class="voucher-ticket"><text>体验券</text></view>
+          <view wx:else class="reward-value"><text class="reward-unit">券</text>{{item.value}}</view>
+          <view class="reward-day">{{item.label}}</view>
+          <view class="reward-action">{{item.action}}</view>
+          <view wx:if="{{item.current}}" class="draw-circle">抽</view>
+        </button>
+      </view>
+    </scroll-view>
+
+    <view class="section-heading prize-heading">
+      <view>
+        <view class="section-title">今日奖品</view>
+        <view class="section-note">{{activeCount}} 场活动正在进行</view>
+      </view>
+      <text class="section-side">免费参与</text>
+    </view>
+
+    <view class="activity-filter-bar">
+      <button
+        wx:for="{{activityFilters}}"
+        wx:key="key"
+        class="activity-filter {{activeActivityFilter === item.key ? 'is-active' : ''}}"
+        data-filter="{{item.key}}"
+        bindtap="changeActivityFilter"
+      >{{item.label}}</button>
+    </view>
+
+    <view wx:if="{{prizeActivities.length}}" class="prize-list">
+      <view
+        wx:for="{{prizeActivities}}"
+        wx:key="id"
+        class="prize-card"
+        hover-class="prize-card-pressed"
+        data-id="{{item.id}}"
+        bindtap="openActivity"
+      >
+        <view class="prize-media tone-{{item.coverTone}}">
+          <image wx:if="{{item.coverImage}}" class="prize-image" src="{{item.coverImage}}" mode="aspectFill"></image>
+          <text wx:else class="prize-symbol">{{item.coverSymbol}}</text>
+          <view class="status-tag status-{{item.statusKey}}">{{item.statusLabel}}</view>
+        </view>
+        <view class="prize-main">
+          <view class="prize-title">{{item.title}}</view>
+          <view class="prize-copy">{{item.prizeNames}}</view>
+          <view class="prize-meta">
+            <text>{{item.timingText}}</text>
+            <text class="prize-arrow">›</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-prizes">
+      <view class="empty-mark">礼</view>
+      <view>{{activeActivityFilter === 'all' ? '更多奖品正在准备中' : '该状态下暂无其他活动'}}</view>
+    </view>
+
+    <view class="safety-note">免费参与 · 奖品不可折现 · 结果以抽奖记录为准</view>
+  </view>
+
+  <view wx:if="{{commandVisible}}" class="command-mask" bindtap="hideCommand" catchtouchmove="stopPropagation">
+    <view class="command-sheet" catchtap="stopPropagation">
+      <button class="sheet-close" aria-label="关闭" bindtap="hideCommand">×</button>
+      <view class="command-illustration">
+        <view class="command-seal">⌕</view>
+        <view class="command-dot"></view>
+      </view>
+      <view class="command-title">输入口令，进入专属抽奖</view>
+      <view class="command-input-wrap {{commandError ? 'has-error' : ''}}">
+        <input
+          class="command-input"
+          value="{{commandValue}}"
+          focus="{{commandFocus}}"
+          maxlength="32"
+          confirm-type="done"
+          placeholder="请输入活动口令"
+          placeholder-class="command-placeholder"
+          bindinput="onCommandInput"
+          bindconfirm="submitCommand"
+        />
+      </view>
+      <view wx:if="{{commandError}}" class="command-error">{{commandError}}</view>
+      <button class="command-submit" bindtap="submitCommand">进入该抽奖</button>
+      <view class="command-help">演示口令：666、coffee、summer</view>
+    </view>
+  </view>
+</view>

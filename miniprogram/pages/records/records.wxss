@@ -1,0 +1,179 @@
+.records-page {
+  min-height: 100vh;
+  padding-bottom: calc(36rpx + env(safe-area-inset-bottom));
+}
+
+.filter-bar {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 104rpx;
+  padding: 12rpx 28rpx 0;
+  border-bottom: 2rpx solid #e9e9e4;
+  background: rgba(250, 250, 247, 0.96);
+}
+
+.filter-button {
+  position: relative;
+  display: flex;
+  height: 90rpx;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  border-radius: 0;
+  background: transparent;
+  color: #777873;
+  font-size: 27rpx;
+}
+
+.filter-button.active {
+  color: #242522;
+  font-weight: 700;
+}
+
+.filter-button.active::after {
+  position: absolute;
+  right: 30%;
+  bottom: 0;
+  left: 30%;
+  height: 5rpx;
+  border: 0;
+  border-radius: 3rpx;
+  background: #d94a3a;
+  content: "";
+}
+
+.filter-count {
+  min-width: 30rpx;
+  color: #a0a19c;
+  font-size: 21rpx;
+  font-weight: 500;
+}
+
+.record-list {
+  padding: 20rpx 28rpx 0;
+}
+
+.record-row {
+  display: flex;
+  min-height: 194rpx;
+  padding: 28rpx 0;
+  border-bottom: 2rpx solid #e5e5df;
+}
+
+.record-row-hover {
+  opacity: 0.64;
+}
+
+.record-symbol {
+  display: flex;
+  width: 104rpx;
+  height: 104rpx;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  background: #f8e1dc;
+  color: #b43e31;
+  font-size: 40rpx;
+  font-weight: 800;
+}
+
+.record-symbol.tone-gold,
+.record-symbol.tone-yellow,
+.record-symbol.tone-amber,
+.record-symbol.tone-coffee {
+  background: #f8ebcd;
+  color: #97631c;
+}
+
+.record-symbol.tone-green,
+.record-symbol.tone-mint,
+.record-symbol.tone-forest {
+  background: #dfede1;
+  color: #347241;
+}
+
+.record-symbol.tone-blue {
+  background: #dfeaf0;
+  color: #37697d;
+}
+
+.record-symbol.tone-pink,
+.record-symbol.tone-purple {
+  background: #efe2ec;
+  color: #7e4d73;
+}
+
+.record-symbol.tone-gray {
+  background: #e9e9e5;
+  color: #777873;
+}
+
+.record-main {
+  min-width: 0;
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.record-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.record-title {
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+  font-size: 29rpx;
+  font-weight: 700;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-prize {
+  display: block;
+  overflow: hidden;
+  margin-top: 14rpx;
+  color: #777873;
+  font-size: 25rpx;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-prize.won {
+  color: #d94a3a;
+  font-weight: 700;
+}
+
+.record-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-top: 16rpx;
+  color: #9a9b96;
+  font-size: 21rpx;
+  line-height: 1.4;
+}
+
+.row-action {
+  flex: 0 0 auto;
+  color: #5e5f5b;
+  font-weight: 600;
+}
+
+.records-empty {
+  padding: 80rpx 48rpx;
+}
+
+.empty-button {
+  min-width: 236rpx;
+  margin-top: 32rpx;
+}

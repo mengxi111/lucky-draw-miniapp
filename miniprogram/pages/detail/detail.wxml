@@ -1,0 +1,162 @@
+<view wx:if="{{notFound}}" class="page">
+  <view class="empty-state detail-empty">
+    <view class="empty-symbol">空</view>
+    <view class="empty-title">活动没有找到</view>
+    <view class="empty-copy">活动可能已被删除，返回活动广场看看其他好礼。</view>
+    <button class="back-button" bindtap="goBack">返回活动广场</button>
+  </view>
+</view>
+
+<view wx:elif="{{activity}}" class="detail-page">
+  <view class="hero tone-{{activity.coverTone}}">
+    <image wx:if="{{activity.coverImage}}" class="hero-image" src="{{activity.coverImage}}" mode="aspectFill"></image>
+    <view wx:if="{{activity.coverImage}}" class="hero-image-shade"></view>
+    <view class="hero-pattern">好 · 运 · 发 · 生</view>
+    <view class="hero-topline">
+      <view class="hero-category">{{activity.category}}</view>
+      <view class="hero-status {{statusClass}}"><text class="hero-status-dot"></text>{{statusLabel}}</view>
+    </view>
+    <view class="hero-lockup">
+      <view class="hero-symbol">{{activity.coverSymbol}}</view>
+      <view class="hero-organizer">{{activity.organizer}}</view>
+    </view>
+    <view class="hero-title">{{activity.title}}</view>
+    <view class="hero-subtitle">{{activity.subtitle}}</view>
+    <view class="hero-divider"></view>
+    <view class="hero-meta">
+      <text>{{countdownText}}</text>
+      <text>{{participantText}}</text>
+    </view>
+    <view class="hero-notch hero-notch-left"></view>
+    <view class="hero-notch hero-notch-right"></view>
+  </view>
+
+  <view class="draw-section">
+    <view class="draw-heading">
+      <view>
+        <view class="draw-title">好运九宫格</view>
+      <view class="draw-note">{{pendingResult ? '上一条结果等待查看' : quotaText}}</view>
+      </view>
+      <button wx:if="{{!shareHidden}}" class="share-icon-button" open-type="share" aria-label="分享活动">↗</button>
+    </view>
+
+    <view wx:if="{{modeNotice}}" class="mode-notice">{{modeNotice}}</view>
+
+    <view class="draw-board">
+      <view
+        wx:for="{{prizes}}"
+        wx:key="id"
+        class="prize-cell slot-{{item.slot}} tone-{{item.tone}} {{activePrizeIndex === item.index ? 'active' : ''}} {{item.unavailable ? 'unavailable' : ''}}"
+      >
+        <text wx:if="{{item.stockText}}" class="prize-stock {{item.stockLow ? 'low-stock' : ''}}">{{item.stockText}}</text>
+        <view class="prize-symbol">{{item.symbol}}</view>
+        <view class="prize-name">{{item.shortName}}</view>
+      </view>
+
+      <button
+        class="draw-button {{drawing ? 'drawing' : ''}}"
+        disabled="{{buttonDisabled}}"
+        bindtap="startDraw"
+      >
+        <text class="draw-button-mark">{{drawing ? '···' : '抽'}}</text>
+        <text class="draw-button-text">{{buttonText}}</text>
+      </button>
+    </view>
+
+    <view class="quota-strip">
+      <view class="quota-item">
+        <text class="quota-value">{{remaining}}</text>
+        <text class="quota-label">今日剩余</text>
+      </view>
+      <view class="quota-divider"></view>
+      <view class="quota-item wide">
+        <text class="quota-value small">{{statusLabel}}</text>
+        <text class="quota-label">当前状态</text>
+      </view>
+      <view class="quota-divider"></view>
+      <view class="quota-item wide">
+        <text class="quota-value small">{{drawModeLabel}}</text>
+        <text class="quota-label">结果公布</text>
+      </view>
+    </view>
+    <view class="prize-overview">
+      <text>{{prizeKindText}}</text>
+      <text>{{stockSummaryText}}</text>
+      <text>概率随机</text>
+    </view>
+  </view>
+
+  <view class="info-band">
+    <view class="band-heading">
+      <view class="band-heading-mark"></view>
+      <view class="band-title">活动信息</view>
+    </view>
+    <view class="info-row">
+      <view class="info-label">活动时间</view>
+      <view class="info-value">{{timeRangeText}}</view>
+    </view>
+    <view class="info-row">
+      <view class="info-label">主办方</view>
+      <view class="info-value">{{activity.organizer}}</view>
+    </view>
+    <view class="info-row last">
+      <view class="info-label">咨询方式</view>
+      <view class="info-value">{{activity.contact}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{activity.introBlocks.length}}" class="intro-band">
+    <view class="band-heading">
+      <view class="band-heading-mark green"></view>
+      <view class="band-title">补充说明</view>
+    </view>
+    <view class="intro-list">
+      <view wx:for="{{activity.introBlocks}}" wx:key="index" class="intro-item">
+        <view class="intro-index">{{index + 1}}</view>
+        <text class="intro-copy">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="rules-band">
+    <view class="band-heading">
+      <view class="band-heading-mark gold"></view>
+      <view class="band-title">活动规则</view>
+    </view>
+    <view wx:if="{{activity.rules.length}}" class="rule-list">
+      <view wx:for="{{activity.rules}}" class="rule-item">
+        <view class="rule-number">{{index + 1}}</view>
+        <view class="rule-copy">{{item}}</view>
+      </view>
+    </view>
+    <view wx:else class="rules-empty">规则由活动主办方公布</view>
+    <view class="compliance-note">
+      <text class="compliance-symbol">✓</text>
+      <text>本活动免费参与，不以分享、关注、助力或付费作为参与条件。</text>
+    </view>
+  </view>
+
+  <view class="bottom-actions">
+    <button wx:if="{{!shareHidden}}" class="bottom-share" open-type="share">分享活动</button>
+    <button class="bottom-draw" disabled="{{buttonDisabled}}" bindtap="startDraw">{{buttonText}}</button>
+  </view>
+</view>
+
+<view wx:if="{{resultVisible}}" class="result-overlay" catchtouchmove="preventTouchMove" bindtap="closeResult">
+  <view class="result-dialog" catchtap="stopPropagation">
+    <button class="result-close" aria-label="关闭" bindtap="closeResult">×</button>
+    <view class="result-kicker">LUCKY RESULT</view>
+    <view class="result-emblem {{result.isWin ? 'win' : 'miss'}}">
+      <view class="result-rays">· · ·</view>
+      <text>{{result.prizeSymbol || (result.isWin ? '奖' : '福')}}</text>
+    </view>
+    <view class="result-title">{{resultTitle}}</view>
+    <view class="result-copy">{{resultCopy}}</view>
+    <view wx:if="{{result.isWin}}" class="result-ticket">
+      <text class="result-ticket-label">本次奖品</text>
+      <text class="result-ticket-name">{{result.prizeName}}</text>
+    </view>
+    <button class="result-action" bindtap="finishResult">{{resultActionText}}</button>
+    <view wx:if="{{result.isWin && result.prizeType === 'physical'}}" class="result-deadline">请在 7 天内完成领奖信息</view>
+  </view>
+</view>
