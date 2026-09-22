@@ -21,7 +21,7 @@
 也可以通过命令打开：
 
 ```powershell
-& "C:\Program Files (x86)\Tencent\微信web开发者工具\cli.bat" open --project "C:\Users\Administrator\Documents\ChatGPT\1\lottery-miniapp"
+& "C:\Program Files (x86)\Tencent\微信web开发者工具\cli.bat" open --project "C:\path\to\lucky-draw-miniapp"
 ```
 
 ## 本地验证
